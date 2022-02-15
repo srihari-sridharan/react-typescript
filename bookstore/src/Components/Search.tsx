@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useState } from "react";
 const defaultResult: ISearchResult = {
   error: 0,
@@ -14,7 +14,7 @@ const Search = () => {
   const handleKeyPress = function (
     e: React.KeyboardEvent<HTMLInputElement>
   ): void {
-    e.key === "Enter" && handleSearch(query);
+    e.key === "Enter" && query && handleSearch(query);
   };
 
   let handleSearch = async (e: any) => {
@@ -56,6 +56,22 @@ interface ISearchResult {
   books: never[];
 }
 
-function RenderBooks(result: ISearchResult) {
-  return <pre>{JSON.stringify(result, null, 2)}</pre>;
-}
+const RenderBooks = (result: ISearchResult) => {
+  return (
+    <div className="flex">
+      {result.books.map((element: any) => {
+        return (
+          <div className="card">
+            <img src={element.image} alt={element.title} />
+            <div className="title">
+              <a href={element.url} target="_blank" rel="noreferrer">
+                {element.title}
+              </a>
+            </div>
+            <div className="subtitle">{element.subtitle}</div>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
