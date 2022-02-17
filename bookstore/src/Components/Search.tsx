@@ -1,11 +1,7 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment } from "react";
 import { useState } from "react";
-const defaultResult: ISearchResult = {
-  error: 0,
-  total: 0,
-  page: 1,
-  books: [],
-};
+import { defaultResult } from "./defaultResult";
+import RenderBooks from "./RenderBooks";
 
 const Search = () => {
   const [query, setQuery] = useState("");
@@ -58,87 +54,67 @@ const Search = () => {
     }
   };
 
-  const RenderBooks = (result: ISearchResult) => {
-    return (
-      <div className="flex">
-        {result.books.map((element: any) => {
-          return (
-            <div className="card">
-              <img src={element.image} alt={element.title} />
-              <div className="title">
-                <a href={element.url} target="_blank" rel="noreferrer">
-                  {element.title}
-                </a>
-              </div>
-              <div className="subtitle">{element.subtitle}</div>
-              <div className="isbn13">ISBN: {element.isbn13}</div>
-              <div className="price">Price: {element.price}</div>
-            </div>
-          );
-        })}
-      </div>
+  const renderSearchBox = (
+    <input
+      type="text"
+      value={query}
+      placeholder="Search books - enter something to search... e.g. javascript, mongodb, etc."
+      onChange={(e) => {
+        setQuery(e.target.value);
+        setTotalBooks(0);
+        setHasMore(true);
+        setInitialPageLoaded(false);
+        setPageCount(0);
+        setCurrentPage(1);
+        setResult({
+          error: 0,
+          total: 0,
+          page: 1,
+          books: [],
+        });
+      }}
+      onKeyPress={handleKeyPress}
+      className="search-box"
+    ></input>
+  );
+
+  const renderTotalBooksFound =
+    initialPageLoaded && totalBooks > 0 && `Found ${totalBooks} books!`;
+
+  const renderLoadMoreButton =
+    initialPageLoaded && currentPage * booksPerPage <= totalBooks ? (
+      <Fragment>
+        <span>
+          Loaded{" "}
+          {currentPage * booksPerPage <= totalBooks
+            ? currentPage * booksPerPage
+            : totalBooks}{" "}
+          books out of {totalBooks}.
+        </span>
+        <input
+          type="button"
+          value="Load More"
+          onClick={(e) =>
+            loadBooks(
+              `https://api.itbook.store/1.0/search/${query}/${currentPage + 1}`
+            )
+          }
+          onKeyPress={handleKeyPress}
+          className="search-box"
+        ></input>
+      </Fragment>
+    ) : (
+      ""
     );
-  };
 
   return (
-    <>
-      <input
-        type="text"
-        value={query}
-        placeholder="Search books - enter something to search... e.g. javascript, mongodb, etc."
-        onChange={(e) => {
-          setQuery(e.target.value);
-          setTotalBooks(0);
-          setHasMore(true);
-          setInitialPageLoaded(false);
-          setPageCount(0);
-          setCurrentPage(1);
-          setResult({
-            error: 0,
-            total: 0,
-            page: 1,
-            books: [],
-          });
-        }}
-        onKeyPress={handleKeyPress}
-        className="search-box"
-      ></input>
-      {initialPageLoaded && totalBooks > 0 && `Found ${totalBooks} books!`}
+    <Fragment>
+      {renderSearchBox}
+      {renderTotalBooksFound}
       {RenderBooks(result)}
-      {initialPageLoaded && currentPage * booksPerPage <= totalBooks ? (
-        <>
-          <span>
-            Loaded{" "}
-            {currentPage * booksPerPage <= totalBooks
-              ? currentPage * booksPerPage
-              : totalBooks}{" "}
-            books out of {totalBooks}.
-          </span>
-          <input
-            type="button"
-            value="Load More"
-            onClick={(e) =>
-              loadBooks(
-                `https://api.itbook.store/1.0/search/${query}/${
-                  currentPage + 1
-                }`
-              )
-            }
-            onKeyPress={handleKeyPress}
-            className="search-box"
-          ></input>
-        </>
-      ) : (
-        ""
-      )}
-    </>
+      {renderLoadMoreButton}
+    </Fragment>
   );
 };
 
 export default Search;
-interface ISearchResult {
-  error: number;
-  total: number;
-  page: number;
-  books: any[];
-}
