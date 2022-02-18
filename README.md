@@ -7,6 +7,8 @@ This repo contains a sample application that acts as a gentle introduction to Re
 - https://reactjs.org/docs/getting-started.html
 - https://reactjs.org/tutorial/tutorial.html
 
+![image](https://facebook.github.io/flux/img/overview/flux-simple-f8-diagram-explained-1300w.png)
+
 Class Components and Function Components
 
 ## State vs. Prop
