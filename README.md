@@ -9,8 +9,6 @@ This repo contains a sample application that acts as a gentle introduction to Re
 
 ![image](https://facebook.github.io/flux/img/overview/flux-simple-f8-diagram-explained-1300w.png)
 
-Class Components and Function Components
-
 ## State vs. Prop
 
 The key difference between props and state is that state is internal and controlled by the component itself while props are external and controlled by whatever renders the component.
