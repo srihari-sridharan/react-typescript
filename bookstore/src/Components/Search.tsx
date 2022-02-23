@@ -54,25 +54,26 @@ const Search = () => {
     }
   };
 
+  const handleChangeEvent = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setQuery(e.target.value);
+    setTotalBooks(0);
+    setHasMore(true);
+    setInitialPageLoaded(false);
+    setPageCount(0);
+    setCurrentPage(1);
+    setResult({
+      error: 0,
+      total: 0,
+      page: 1,
+      books: [],
+    });
+  };
   const renderSearchBox = (
     <input
       type="text"
       value={query}
       placeholder="Search books - enter something to search... e.g. javascript, mongodb, etc."
-      onChange={(e) => {
-        setQuery(e.target.value);
-        setTotalBooks(0);
-        setHasMore(true);
-        setInitialPageLoaded(false);
-        setPageCount(0);
-        setCurrentPage(1);
-        setResult({
-          error: 0,
-          total: 0,
-          page: 1,
-          books: [],
-        });
-      }}
+      onChange={handleChangeEvent}
       onKeyPress={handleKeyPress}
       className="search-box"
     ></input>

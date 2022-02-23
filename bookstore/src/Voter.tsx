@@ -6,7 +6,11 @@ type ACTIONTYPE =
   | { type: "increment"; payload: number }
   | { type: "decrement"; payload: string };
 
-function reducer(state: typeof initialState, action: ACTIONTYPE) {
+interface IVote{
+  vote:number;
+}
+
+function reducer(state: IVote, action: ACTIONTYPE) {
   switch (action.type) {
     case "increment":
       return { vote: state.vote + action.payload };
